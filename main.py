@@ -1,24 +1,16 @@
-from pymongo import MongoClient
+from database import DataBase
 import keys
+from load_data import LoadData
 
 
 PATH = f"mongodb+srv://MiNADZ:{keys.PASSWORD}@atlascluster.y8etfyq.mongodb.net/?retryWrites=true&w=majority"
 
 
 if __name__ == "__main__":
-    try:
-        client = MongoClient(PATH)
-    except Exception:
-        print('Bład połacczenia sie z baza')
-        exit(-1)
+    db = DataBase()
+    db.conect(PATH)
 
-    db = client['Projekt_1']
-    colect = db['projekt_1']
+    http = LoadData()
+    data = http.load()
 
-    """ to dodaje nowy elementa do bazy danych """
-    try:
-        post = {"_id": 0, "name": "tim", "score": 5}
-        colect.insert_one(post)
-    except Exception:
-        print("Bład dodania elementu do bazy")
-        print("Element pewnie juz istnieje")
+    db.push(data)
