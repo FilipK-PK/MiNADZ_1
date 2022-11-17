@@ -7,10 +7,13 @@ PATH = f"mongodb+srv://MiNADZ:{keys.PASSWORD}@atlascluster.y8etfyq.mongodb.net/?
 
 
 if __name__ == "__main__":
-    db = DataBase()
-    db.conect(PATH)
+   db = DataBase()
+   db.conect(PATH)
 
-    http = LoadData()
-    data = http.load()
+   http = LoadData()
+   data = http.load()
 
-    db.push(data)
+   db.push(data)
+
+   #print rekordów z bazy danych
+   db.printAll()

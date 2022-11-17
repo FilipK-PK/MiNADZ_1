@@ -19,7 +19,12 @@ class DataBase:
 
     def push(self, data):
         try:
-            self.__colect.insert_one(data)
+            for i in range(len(data)):
+                self.__colect.insert_one({'day': data[i][0], 'closingPrice': data[i][1]})
         except Exception as ex:
             print(ex)
             exit(-1)
+
+    def printAll(self):
+        for doc in self.__colect.find():
+            print(doc)
