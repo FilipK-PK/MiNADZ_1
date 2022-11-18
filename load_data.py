@@ -16,7 +16,7 @@ class LoadData:
         data = []
 
         # pobieranie danych z pod stron
-        for index in range(1, 2):
+        for index in range(1, 5):
             try:
                 # pobieranie strony
                 file_html = requests.get(PATH + ',' + str(index))

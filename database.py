@@ -28,3 +28,6 @@ class DataBase:
     def printAll(self):
         for doc in self.__colect.find():
             print(doc)
+
+    def load_data(self):
+        return self.__colect.find()
