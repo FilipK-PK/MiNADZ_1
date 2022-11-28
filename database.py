@@ -1,12 +1,13 @@
 from pymongo import MongoClient
-from securyty import Securyty
+from security import Security
 
 
 class DataBase:
-    def __init__(self):
+    def __init__(self, security):
         self.__client = None
         self.__db = None
         self.__colect = None
+        self.__security = security
 
     def conect(self, path):
         try:
@@ -18,35 +19,36 @@ class DataBase:
             self.__colect = self.__db['db']
         except Exception as ex:
             print(ex)
-            exit(-1)
+            exit(-6)
 
-    def push(self, data, key):
-        secury = Securyty()
+    def push(self, data):
         try:
             for i in range(len(data)):
                 self.__colect.insert_one(
                     {
-                        'day': secury.encrypt(data[i][0], key),
-                        'closingPrice': secury.encrypt(data[i][1], key)
+                        'day': self.__security.encrypt(data[i][0]),
+                        'closingPrice': self.__security.encrypt(data[i][1])
                     }
                 )
         except Exception as ex:
-                print(ex)
-                exit(-1)
+            print(ex)
+            exit(-4)
 
-    def printAll(self):
-        for doc in self.__colect.find():
-            print(doc)
+    def load_data(self):
+        data = []
 
-    def load_data(self, key):
-        secur = Securyty()
+        for row in self.__colect.find():
+            try:
+                new_row = {
+                    'day': self.__security.decrypt(row['day']),
+                    'closingPrice': float(self.__security.decrypt(row['closingPrice'])),
+                    }
+            except Exception:
+                continue
 
-        return [
-            {
-                'day': secur.decrypt(i['day'], key),
-                'closingPrice': secur.decrypt(i['closingPrice'], key),
-            } for i in self.__colect.find()
-        ]
+            data.append(new_row)
+
+        return data
 
     def clear(self):
         try:
@@ -56,4 +58,4 @@ class DataBase:
                     self.__colect.remove(row)
         except Exception as er:
             print(er)
-            exit(-1)
+            exit(-5)

@@ -2,28 +2,27 @@ from database import DataBase
 import keys
 from load_data import LoadData
 from statistic_data import Statistic
-from securyty import Securyty
+from security import Security
 
 
 PATH = f'mongodb+srv://Filip_PK:{keys.PASSWORD}@cluster0.ypawun1.mongodb.net/?retryWrites=true&w=majority'
-
+PATH_AES = 'key_aes.bin'
 
 if __name__ == "__main__":
-   db = DataBase()
-   db.conect(PATH)
+   secur = Security(PATH_AES)
 
-   secur = Securyty()
+   db = DataBase(secur)
+   db.conect(PATH)
 
    # ladniejszy wyglad
    db.clear()
 
+   # pobieranie http
    http = LoadData()
    data = http.load()
 
-   db.push(data, secur.key)
-
-   #print rekordów z bazy danych
-   db.printAll()
+   # zapis danych
+   db.push(data)
 
    # statystyki
-   Statistic().describe(db.load_data(secur.key))
+   Statistic().describe(db.load_data())

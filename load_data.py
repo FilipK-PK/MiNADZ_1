@@ -16,7 +16,7 @@ class LoadData:
         data = []
 
         # pobieranie danych z pod stron
-        for index in range(1, 3):
+        for index in range(1, 10):
             try:
                 # pobieranie strony
                 file_html = requests.get(PATH + ',' + str(index))
@@ -24,7 +24,7 @@ class LoadData:
                 # wyciaganie danych i separowanie
                 soup = BeautifulSoup(file_html.text, 'html.parser')
                 table = soup.find_all("table", class_="qTableFull")[0]
-                print(index)
+                print('page', index)
             except Exception as ex:
                 print(ex)
                 break
