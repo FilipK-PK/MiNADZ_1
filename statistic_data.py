@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import math as m
 
 class Statistic:
-
     def describe(self, data):
         val = np.array([float(col['closingPrice']) for col in data])
         data = pd.DataFrame(val, columns=['Close'])

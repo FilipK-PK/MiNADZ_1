@@ -41,11 +41,12 @@ class DataBase:
     def load_data(self, key):
         secur = Securyty()
 
-        return list(
+        return [
             {
-                i[0], secur.decrypt(i[1], key)
+                'day': secur.decrypt(i['day'], key),
+                'closingPrice': secur.decrypt(i['closingPrice'], key),
             } for i in self.__colect.find()
-        )
+        ]
 
     def clear(self):
         try:
