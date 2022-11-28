@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from securyty import Securyty
 
 
 class DataBase:
@@ -19,10 +20,16 @@ class DataBase:
             print(ex)
             exit(-1)
 
-    def push(self, data):
+    def push(self, data, key):
+        secury = Securyty()
         try:
             for i in range(len(data)):
-                self.__colect.insert_one({'day': data[i][0], 'closingPrice': data[i][1]})
+                self.__colect.insert_one(
+                    {
+                        'day': secury.encrypt(data[i][0], key),
+                        'closingPrice': secury.encrypt(data[i][1], key)
+                    }
+                )
         except Exception as ex:
                 print(ex)
                 exit(-1)
@@ -31,8 +38,14 @@ class DataBase:
         for doc in self.__colect.find():
             print(doc)
 
-    def load_data(self):
-        return self.__colect.find()
+    def load_data(self, key):
+        secur = Securyty()
+
+        return list(
+            {
+                i[0], secur.decrypt(i[1], key)
+            } for i in self.__colect.find()
+        )
 
     def clear(self):
         try:
